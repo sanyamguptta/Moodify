@@ -125,6 +125,21 @@ async function login(req, res) {
 
 }
 
+async function logout (req, res) {
+
+  // 
+  const token = req.cookies.token;
+
+  res.clearCookie ('token');
+  // setting token in redis with expiry of 1 hour
+  await redis.set(token, Date.now().toString(), 'EX', 60 * 60)
+
+  res.status(200).json({
+    message: 'logout successfully!'
+  })
+
+}
+
 
 
 

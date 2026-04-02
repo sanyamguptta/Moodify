@@ -1,0 +1,19 @@
+.button {
+    color: white;
+    background-color: red;
+    padding-inline: 1rem;
+    padding-block: 0.5rem;
+    text-decoration: none;
+    outline: none;
+    border: none;
+    cursor: pointer;
+    display: inline-block;
+
+    border-radius: 0.6rem;
+
+    .form-group {
+        display: flex;
+        flex-direction: column;
+        gap: 4rem;
+    }
+}

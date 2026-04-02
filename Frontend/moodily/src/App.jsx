@@ -1,13 +1,15 @@
-import FaceExpression from "./features/Expression/components/FaceExpression"
+import React from 'react'
+import { RouterProvider } from 'react-router';
+import { router } from './app.routes';
+import './features/shared/styles/global.scss'
+import { AuthProvider } from './features/auth/auth.context';
 
-function App() {
-
+const App = () => {
   return (
-   <div>
-    <h1>Face Expression Detection</h1>
-    <FaceExpression />
-   </div>
-  )
+    <AuthProvider>
+      <RouterProvider router={router} />
+    </AuthProvider>
+  );
 }
 
 export default App
