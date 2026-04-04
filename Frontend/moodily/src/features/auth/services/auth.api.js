@@ -23,8 +23,12 @@ export async function register({ username, email, password }) {
 
 export async function login({ username, email, password}) {
     
-    // 
-    const response = await api.post('/api/auth/login');
+    // send credentials in the request body
+    const response = await api.post('/api/auth/login', {
+        email,
+        username,
+        password
+    });
     return response.data;
 }
 
@@ -38,6 +42,6 @@ export async function getMe() {
 export async function logout() {
 
     //
-    const response = api.get('/api/auth/logout');
+    const response = await api.get('/api/auth/logout');
     return response.data;
 }

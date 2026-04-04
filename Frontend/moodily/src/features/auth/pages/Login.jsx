@@ -22,7 +22,7 @@ const Login = () => {
     navigate('/');
   }
 
-  return (
+  return (  
     <main className="login-page">
       <div className="form-page">
         <h1>Login</h1>

@@ -6,7 +6,7 @@ import { useContext } from 'react';
 // for 
 import { AuthContext } from '../auth.context';
 
-export const useAuth() => {
+export const useAuth = () => {
 
     // extracting state variables and function using AuthContect
     const context = useContext(AuthContext);
@@ -27,8 +27,9 @@ export const useAuth() => {
         
         // setting laoding as true untill response comes
         setLoading(true);
+        // console.log({ email, password });
         // calling login() function for storing response & setting response in state variable
-        const data = await login({ username, email, password });
+        const data = await login({ email, password });
         setUser(data.user);
         // setting back to false
         setLoading(false);
@@ -58,7 +59,6 @@ export const useAuth() => {
 
 // now, we can access these 6 paramters anywhere through useAuth() hook
 return {
-    user, 
     loading,
     handleRegister, 
     handleLogin,

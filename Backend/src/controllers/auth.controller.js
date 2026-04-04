@@ -146,4 +146,5 @@ async function logout (req, res) {
 module.exports = {
   register,
   login,
+  logout
 };
