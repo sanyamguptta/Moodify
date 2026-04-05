@@ -5,7 +5,7 @@ import { Navigate, useNavigate } from "react-router";
 const Protected = ({ children }) => {
 
   // extracting loading and user property from useAuth()
-  const { loading, user } = useAuth();
+  const { user, loading } = useAuth();
 
   // calling useNavigate()
   const navigate = useNavigate();
@@ -14,10 +14,10 @@ const Protected = ({ children }) => {
   if (loading) {
     return <h1>loading...</h1>;
   }
-  // else, navigate to the login page
-  if (!loading || !user) {
+  // if user state is not available, then redirects to the /login route
+  if (!loading && !user) {
     return <Navigate to="/login" />;
-  }
+  } 
 
   return children;
 };

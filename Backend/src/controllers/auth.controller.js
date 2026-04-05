@@ -1,6 +1,8 @@
 const userModel = require("../models/user.model");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
+//
+const redis = require('../config/cache');
 
 // function to register a user
 async function register(req, res) {
@@ -58,9 +60,9 @@ async function register(req, res) {
   return res.status(201).json({
     message: "user registered successfully",
     user: {
-        id: user._id,
-        username: user.username,
-        email: user.email
+      id: user._id,
+      username: user.username,
+      email: user.email,
     },
   });
 }
@@ -70,15 +72,17 @@ async function login(req, res) {
   const { username, email, password } = req.body;
 
   // checking if user already exits with the email
-  const user = await userModel.findOne({
-    $or: [
-      {
-        email: email,
-      },
-      {
-        username: username,
-      },
-    ],
+  const user = await userModel.findOne({ 
+
+    email
+    // $or: [
+    //   {
+    //     email: email,
+    //   },
+    //   {
+    //     username: username,
+    //   },
+    // ],
   });
 
   // if user not exits with the email then return error with status code 400
@@ -106,45 +110,65 @@ async function login(req, res) {
     },
     process.env.JWT_SECRET,
     {
-        expiresIn: '3d',
+      expiresIn: "3d",
     },
   );
 
   // setting the token in cookie
-  res.cookie('token', token);
+  res.cookie("token", token);
 
   // returning the user and success message with status code 200
   res.status(200).json({
     message: "user logged in successfully",
     user: {
-        id: user._id,
-        username: user.username,
-        email: user.email,
-    }
-  })
-
+      id: user._id,
+      username: user.username,
+      email: user.email,
+    },
+  });
 }
 
-async function logout (req, res) {
+async function getMe(req, res) {
 
-  // 
+  // extract token from req.body
   const token = req.cookies.token;
 
-  res.clearCookie ('token');
-  // setting token in redis with expiry of 1 hour
-  await redis.set(token, Date.now().toString(), 'EX', 60 * 60)
+  // if token not founf then return 
+  if(!token) {
+    return res.status(401).json({
+      message: 'Unauthorized access'
+    })
+  }
+
+  // check if token is valid
+  const decoded = jwt.verify(token, process.env.JWT_SECRET);
+
+  const user = await userModel.findById(decoded.id).select('-password')
 
   res.status(200).json({
-    message: 'logout successfully!'
+    user
   })
+
+
 
 }
 
+async function logout(req, res) {
+  //
+  const token = req.cookies.token;
 
+  res.clearCookie("token");
+  // setting token in redis with expiry of 1 hour
+  await redis.set(token, Date.now().toString(), "EX", 60 * 60);
 
+  res.status(200).json({
+    message: "logout successfully!",
+  });
+}
 
 module.exports = {
   register,
   login,
+  getMe,
   logout
 };
