@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { init, detect } from "../utils/utils";
-import { FaceLandmarker, FilesetResolver } from "@mediapipe/tasks-vision";
+// import { FaceLandmarker, FilesetResolver } from "@mediapipe/tasks-vision";
 
 export default function FaceExpression() {
   const videoRef = useRef(null);
