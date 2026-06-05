@@ -1,5 +1,5 @@
 const userModel = require("../models/user.model");
-const bcryptjs = require("bcryptjs");
+const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
 async function registerUser(req, res) {
@@ -12,7 +12,7 @@ async function registerUser(req, res) {
   // checking if user already existing then sending response
   if (isAlreadyExists) {
     return res.status(400).json({
-      message: "User with the same email or password already exits",
+      message: "User with the same email or username already exits",
     });
   }
 
@@ -21,7 +21,7 @@ async function registerUser(req, res) {
 
   //
   const user = await userModel.create({
-    user,
+    username,
     email,
     password: hash, // password should be hashed
   });
@@ -62,7 +62,7 @@ async function loginUser(req, res) {
   // checking if user already exits or not in DB
   const user = await userModel.findOne({
     $or: [{ username }, { email }],
-  });
+  }).select('+password');
 
   //
   if (!user) {
@@ -84,7 +84,7 @@ async function loginUser(req, res) {
   // if password is valid, then create token
   const token = jwt.sign(
     {
-      user: user._id,
+      id: user._id,
       username: user.username,
     },
     process.env.JWT_SECRET,
@@ -93,9 +93,9 @@ async function loginUser(req, res) {
     },
   );
 
-    res.token("token", token);
+    res.cookie("token", token);
 
-    return res.status(400).json({
+    return res.status(200).json({
         messsage: "User logged in successfully",
         user: {
             id: user._id,
@@ -106,7 +106,18 @@ async function loginUser(req, res) {
 
 }
 
+async function getMe(req, res) {
+
+  const user = await userModel.findById(req.user.id);
+
+  return res.status(200).json({
+    message: 'User fetched successfully!',
+    user,
+  })
+}
+
 module.exports = {
   registerUser,
-  loginUser
+  loginUser,
+  getMe
 };
