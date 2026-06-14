@@ -14,8 +14,6 @@ router.post('/login', authController.loginUser);
 // also, if the user never registered or do not have token then the req will not be forwarded to the controller
 router.get('/get-me', authMiddleware.authUser, authController.getMe);
 
-
-
-
+router.get('/logout', authController.logout);
 
 module.exports = router;
