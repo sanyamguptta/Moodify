@@ -1,16 +1,20 @@
-// import { useState } from 'react'
-// import reactLogo from './assets/react.svg'
-// import viteLogo from './assets/vite.svg'
-// import heroImg from './assets/hero.png'
-import './App.css'
-import FaceExpression from './features/Expression/components/FaceExpression'
+// Ui -layer  -> dikhana & navigation handle krna (pages, components)
+// hook layer -> State & API manage krna [hooks]
+// state layer -> for storing data [auth.context.js, post.context.js]
+// API layer -> for communicating frontend with the Backend [services/auth.api.js]
 
-function App() {
-  // const [count, setCount] = useState(0)
+import { RouterProvider } from "react-router";
+import { router } from './app.routes'; 
+import './features/shared/styles/global.scss'  // importing global scss file 
+import { AuthProvider } from "./features/auth/auth.context";
 
+const App = () => {
   return (
-    <FaceExpression />
-  )
+    // now, all states access of AuthProvider will go to the application
+    <AuthProvider>
+      <RouterProvider router={router} />
+    </AuthProvider>
+  );
 }
 
 export default App

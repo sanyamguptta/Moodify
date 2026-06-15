@@ -1,0 +1,39 @@
+.login-page {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+
+    .form-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 1rem;
+        padding-inline: 2rem;
+        padding-block: 6rem;
+        border-radius: 2rem;
+
+        background-color: rgb(45, 43, 43);
+
+        // .form-group {
+        //     display: flex;
+        // }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            width: 320px;
+    
+            input {
+                margin-top: 0.2rem;
+                width: 100%;
+                padding: 0.5rem;
+                border-radius: 0.3rem;
+                border: none;
+                outline: none;
+            }
+        }
+    }
+}

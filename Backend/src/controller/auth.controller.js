@@ -30,6 +30,8 @@ async function registerUser(req, res) {
     password: hash, // password should be hashed
   });
 
+  console.log("JWT_SECRET:", process.env.JWT_SECRET);
+
   // creating token
   const token = jwt.sign(
     {
@@ -61,12 +63,12 @@ async function registerUser(req, res) {
 
 async function loginUser(req, res) {
   //
-  const { username, email, password } = req.body;
+  const { email, password } = req.body;
 
   // checking if user already exits or not in DB
   const user = await userModel
     .findOne({
-      $or: [{ username }, { email }],
+      $or: [ { email }],
     })
     .select("+password");
 
@@ -104,6 +106,10 @@ async function loginUser(req, res) {
 
   // setting token in the cookies
   res.cookie("token", token);
+
+  console.log("USER:", user);
+  console.log("DB PASSWORD:", user?.password);
+  console.log("IS HASH:", user?.password?.startsWith("$2"));
 
   // return with appropriate status code after setting token in the cookies
   return res.status(200).json({
