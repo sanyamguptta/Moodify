@@ -8,7 +8,7 @@ export const init = async ({landmarkerRef, videoRef, streamRef }) => {
   const vision = await FilesetResolver.forVisionTasks(
     "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@latest/wasm",
   );
- 
+
   landmarkerRef.current = await FaceLandmarker.createFromOptions(vision, {
     baseOptions: {
       modelAssetPath:
@@ -24,6 +24,11 @@ export const init = async ({landmarkerRef, videoRef, streamRef }) => {
   });
   videoRef.current.srcObject = streamRef.current;
   await videoRef.current.play();
+  // try {
+  //   await videoRef.current.play();
+  // } catch (err) {
+  //   console.log("Video play interrupted or blocked:", err);
+  // }
 
   // detect();
 
@@ -56,19 +61,26 @@ export const detect = ({ landmarkerRef, videoRef, setExpression }) => {
     const browDownLeft = getScore("browDownLeft");
     const browDownRight = getScore("browDownRight");
 
-    let currentExpression = "😐 Neutral";
+    let currentExpression = "sad";
 
     if (smileLeft > 0.5 && smileRight > 0.5) {
-      currentExpression = "😊 Happy";
-    } else if (jawOpen > 0.6 && browUp > 0.5) {
-      currentExpression = "😲 Surprised";
-    } else if (browDownLeft > 0.5 && browDownRight > 0.5) {
-      currentExpression = "😠 Angry";
-    } else if (frownLeft > 0.5 && frownRight > 0.5) {
-      currentExpression = "😢 Sad";
+      currentExpression = "happy";
     }
+    else if (jawOpen > 0.6 && browUp > 0.5) {
+      currentExpression = "surprised";
+    }
+    // else if (browDownLeft > 0.5 && browDownRight > 0.5) {
+    //   currentExpression = "Angry 😠";
+    // }
+    // else if (frownLeft > 0.5 && frownRight > 0.5) {
+    //   currentExpression = "Sad😢";
+    // }
 
     setExpression(currentExpression);
+
+    // returning the expression which is detected through web came
+    return currentExpression;
   }
 
 };
+

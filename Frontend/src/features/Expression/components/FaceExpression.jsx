@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { init, detect } from "../utils/utils";
 // import { FaceLandmarker, FilesetResolver } from "@mediapipe/tasks-vision";
 
-export default function FaceExpression() {
+export default function FaceExpression({ onClick = () => { }}) {
   const videoRef = useRef(null);
   const landmarkerRef = useRef(null);
   const animationRef = useRef(null);
@@ -28,6 +28,15 @@ export default function FaceExpression() {
     };
   }, []);
 
+  // function for detecting expression 
+  // this fn runs which clicked on button
+  async function handleClick() {
+    const expression = detect({ landmarkerRef, videoRef, setExpression });  
+    // passing onClick()
+    console.log(expression);
+    onClick(expression);
+  }
+
   return (
     <div style={{ textAlign: "center" }}>
       <video
@@ -36,14 +45,8 @@ export default function FaceExpression() {
         playsInline
       />
       <h2>{expression}</h2>
-      <button onClick={() => {  
-        detect({
-          landmarkerRef,
-          videoRef, 
-          setExpression
-        })
-      }}> Detect Expression </button>
-    </div>
+      <button onClick={handleClick}> Detect Expression </button>
+    </div>  
   );
 }
   
