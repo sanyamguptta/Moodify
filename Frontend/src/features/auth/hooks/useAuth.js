@@ -1,7 +1,7 @@
 // hooks layer -> 
 
 import { register, login, getMe, logout } from '../services/auth.api';
-import { useContext } from 'react';
+import { useContext, useEffect } from 'react';
 import { AuthContext } from '../auth.context';
 
 export const useAuth = () => {
@@ -37,6 +37,12 @@ export const useAuth = () => {
         setLoading(false);
     }
 
+    // iterating user again for preveserving the value of user value (setUser), we call handleGetMe() 
+    // fn which sets users again by calling getMe() api again and sets loading state as false
+    // this helps in logged in of the user even on the page refresh
+    useEffect(() => {
+        handleGetMe();
+    },[])
 
     return ({
         user,

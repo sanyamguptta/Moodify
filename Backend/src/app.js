@@ -14,8 +14,10 @@ app.use(cors({
 
 // requiring router 
 const authRoutes = require('./routes/auth.routes');
+const songRoutes = require('./routes/song.routes');
+
 // using a default suffix before the actual route url
 app.use('/api/auth', authRoutes);
-
+app.use('/api/song', songRoutes);
 
 module.exports = app;
